@@ -81,7 +81,7 @@
 </dependency>
 ```
 
-- Below is the Spring configuration using Java beans, this is like a spring-servlet.xml like we have seen in [Spring MVC](https://github.com/codophilic/LearnSpring/blob/main/Spring%20MVC.md)
+- Below is the Spring configuration using Java beans, this is like a spring-servlet.xml like we have seen in [Spring MVC](https://github.com/itsCodophilic/Learn-Spring/blob/main/Spring%20MVC.md)
 
 ```
 package security;
@@ -443,7 +443,7 @@ https://github.com/user-attachments/assets/1f0fb892-9bb6-40c2-b218-227eaa0b4257
 
 - Here is the reference [video](https://www.youtube.com/watch?v=Q3yStECBuAg&t=1217s)
 
-- Above learnings are implemented [here](https://github.com/codophilic/LearnSpring/tree/main/Spring%20Security/security/src/main/java/security).
+- Above learnings are implemented [here](https://github.com/itsCodophilic/Learn-Spring/tree/main/Spring%20Security/security/src/main/java/security).
 
 
 
