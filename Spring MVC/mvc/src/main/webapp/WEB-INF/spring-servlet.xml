@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context 
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx.xsd       
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc.xsd"
+           >
+<!-- Configure static resource handling -->
+	<mvc:annotation-driven />
+	<mvc:resources mapping="/images/**" location="/images/" />
+    <!--  Enabling Component Scanning Annotations for all packages -->
+	<context:component-scan base-package="mvc"/> 
+	<tx:annotation-driven />
+	<!-- DataSource bean: Providing resources (database connection details) -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/springhibernate" />
+        <property name="username" value="root" />
+        <property name="password" value="Meetpandya40@" />
+    </bean>
+
+    <!-- Hibernate properties: Configuration settings -->
+    <bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- SessionFactory bean: Coordinating the overall database interaction -->
+    <bean id="factory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="hibernateProperties" ref="hibernateProperties" />
+        <!-- Scanning for annotated entity classes -->
+	<property name="annotatedClasses">
+			<list>
+			<value>mvc.model.entities.Student</value>
+			</list>
+			</property>    
+	</bean>
+
+    <!-- Transaction manager: Ensures transaction management -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="factory" />
+    </bean>
+
+<!-- Defining view resolver and passing properties of it, which it requires for resolving -->
+<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" name="viewResolver">
+	<!-- Prefix tells spring where all the pages are present -->
+	<property name="prefix" value="/WEB-INF/pages/"></property>
+	<!-- Suffix tells what extension of files are to be considered (here all .jsp files) -->
+	<property name="suffix" value=".jsp"></property>
+	
+	<!-- Basically Controllers gives view name, FrontController passes this view to ViewResolver
+		So example if Controller gives hello, then the ViewResolver returns the page /WEB-INF/pages/hello.jsp
+	 -->
+</bean>
+
+<!--  Interceptor -->
+<mvc:interceptors>
+	<mvc:interceptor>
+		<mvc:mapping path="/welcome"/>
+		<bean class= "mvc.interceptor.MyHandlerClassInterceptorAdapter"/>
+	</mvc:interceptor>
+	<mvc:interceptor>
+		<mvc:mapping path="/welcome"/>
+		<bean class= "mvc.interceptor.MyHandlerInterceptor"/>
+	</mvc:interceptor>
+	<!-- Defining multiple interceptor for different URI
+		<mvc:interceptor>
+		<mvc:mapping path="/welcome"/>
+		<bean class= "mvc.interceptor.MyHandlerClassInterceptorAdapter"/>
+	</mvc:interceptor>
+	 -->
+</mvc:interceptors>
+
+</beans>
